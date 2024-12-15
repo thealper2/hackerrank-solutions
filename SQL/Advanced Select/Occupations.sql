@@ -1,0 +1,14 @@
+WITH OccupationRanked AS (
+  SELECT 
+    Name,
+    OCCUPATION,
+    ROW_NUMBER() OVER (PARTITION BY OCCUPATION ORDER BY NAME) AS RowNumber
+  FROM OCCUPATIONS
+)
+SELECT 
+  MIN(CASE WHEN OCCUPATION = 'Doctor' THEN Name END) AS Doctor,
+  MIN(CASE WHEN OCCUPATION = 'Professor' THEN Name END) AS Professor,
+  MIN(CASE WHEN OCCUPATION = 'Singer' THEN Name END) AS Singer,
+  MIN(CASE WHEN OCCUPATION = 'Actor' THEN Name END) AS Actor
+FROM OccupationRanked
+GROUP BY RowNumber;
